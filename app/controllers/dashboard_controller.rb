@@ -2,11 +2,11 @@ class DashboardController < ApplicationController
   before_action :set_artist_and_movie, only: [:count_history, :update_count]
 
   def index
-    @movies = Movie.all
+    @movies = Movie.page(params[:page])
   end
 
   def count_history
-    @views = @movie.views
+    @views = @movie.views.order(created_at: 'DESC').page(params[:page])
   end
 
   def update_count
