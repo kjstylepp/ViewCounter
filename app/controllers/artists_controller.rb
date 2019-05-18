@@ -35,7 +35,7 @@ class ArtistsController < ApplicationController
   end
 
   def destroy
-    redirect_to '/artists', notice: '#{@artist.name}を削除しました'
+    redirect_to '/artists', notice: "#{@artist.name}を削除しました"
   end
 
   private
