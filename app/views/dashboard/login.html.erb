@@ -1,0 +1,17 @@
+<% if flash[:alert] %>
+  <div class="alert alert-danger" role="alert">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<%= form_with url: '/login', class: 'form-signin' do |form| %>
+
+  <h1 class="h3 mb-3 font-weight-normal">管理者ログイン</h1>
+  <label for="inputPassword" class="sr-only">管理者パスワード</label>
+  <%= form.password_field :password, class: 'form-control', placeholder: 'パスワード', required: true %>
+  <div class="checkbox mb-3">
+    <label>
+    </label>
+  </div>
+  <button class="btn btn-lg btn-primary btn-block" type="submit">ログイン</button>
+<% end %>

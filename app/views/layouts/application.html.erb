@@ -1,15 +1,80 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>ViewCounter</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<html lang="ja">
+<head>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>動画再生数チェッカー</title>
 
-  <body>
-    <%= yield %>
-  </body>
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+  <!-- Custom styles for this template -->
+  <link href="/dashboard.css" rel="stylesheet">
+  <link href="/login.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">動画再生数チェッカー</a>
+  <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <% if session[:admin_session] %>
+        <a class="nav-link" href="/logout">ログアウト</a>
+      <% else %>
+        <a class="nav-link" href="/login">管理者ログイン</a>
+      <% end %>
+    </li>
+  </ul>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <% if session[:admin_session] %>
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <span data-feather="home"></span>
+                ダッシュボード
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/artists">
+                <span data-feather="file"></span>
+                アーティスト一覧
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <%= yield %>
+      </main>
+    <% else %>
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-12 px-4">
+        <%= yield %>
+      </main>
+    <% end %>
+  </div>
+</div>
+</body>
 </html>

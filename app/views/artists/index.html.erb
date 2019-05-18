@@ -1,0 +1,50 @@
+<% if flash[:notice] %>
+  <div class="alert alert-success" role="alert">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<% if flash[:alert] %>
+  <div class="alert alert-danger" role="alert">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<h1 class="h2">アーティスト一覧</h1>
+
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+    <tr>
+      <th>アーティスト名</th>
+      <th>登録動画数</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @artists.each do |artist| %>
+      <tr>
+        <td><%= link_to artist.name, "/artists/#{artist.id}" %></td>
+        <td><%= artist.movies.size %></td>
+        <td>
+          <%= link_to '編集', "/artists/#{artist.id}/edit", class: 'btn btn-secondary btn-sm' %>
+          <%= link_to '削除', "/artists/#{artist.id}/destroy", class: 'btn btn-danger btn-sm', method: :delete, data: { confirm: "本当に#{artist.name}を削除しますか？" } %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<h5>新規アーティスト登録</h5>
+
+<%= form_with model: @new_artist, url: '/artists' do |form| %>
+  <div class="field">
+    <%= form.text_field :name, class: 'form-control', placeholder: 'アーティスト名', required: true%>
+  </div>
+  <div class="checkbox mb-3">
+    <label>
+    </label>
+  </div>
+  <button class="btn btn-primary btn-sm" type="submit">登録</button>
+<% end %>
