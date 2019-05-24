@@ -21,7 +21,7 @@
       <th>サムネイル</th>
       <th>タイトル</th>
       <th>最新の再生数</th>
-      <th>取得日時</th>
+      <th>取得日</th>
       <th></th>
     </tr>
     </thead>
@@ -36,10 +36,10 @@
           <% end %>
         </td>
         <td><%= link_to movie.title, "https://www.youtube.com/watch?v=#{movie.youtube_id}", target: '_blank' %></td>
-        <% latest_view = movie.views.order('created_at DESC').first %>
+        <% latest_view = movie.views.order(update_date: 'DESC').first %>
         <% if latest_view %>
           <td><%= latest_view.count %></td>
-          <td><%= latest_view.created_at %></td>
+          <td><%= latest_view.update_date %></td>
         <% else %>
           <td>-</td>
           <td>-</td>

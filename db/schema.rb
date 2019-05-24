@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2019_05_17_040438) do
 
   create_table "views", force: :cascade do |t|
     t.integer "count"
+    t.date "update_date"
     t.integer "movie_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get '/artists/:artist_id/movies/:id/views', to: 'dashboard#count_history'
   post '/artists/:artist_id/movies/:id/update_count', to: 'dashboard#update_count'
   post '/update_all_count', to: 'dashboard#update_all_count'
+  get '/export', to: 'dashboard#export'
 
   get '/login', to: 'dashboard#login'
   post '/login', to: 'dashboard#create_admin_session'

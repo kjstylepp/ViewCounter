@@ -6,7 +6,7 @@ class DashboardController < ApplicationController
   end
 
   def count_history
-    @views = @movie.views.order(created_at: 'DESC').page(params[:page])
+    @views = @movie.views.order(update_date: 'DESC').page(params[:page])
   end
 
   def update_count
@@ -21,6 +21,10 @@ class DashboardController < ApplicationController
     result = Movie.update_all_count
 
     redirect_to '/', notice: "全#{result[:all]}件の動画の#{result[:success]}件の再生数を更新しました"
+  end
+
+  def export
+
   end
 
   def login

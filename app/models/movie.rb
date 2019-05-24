@@ -18,7 +18,7 @@ class Movie < ApplicationRecord
     query = {id: self.youtube_id, key: Rails.configuration.google_api_key, part: 'snippet'}
     res = JSON.parse(client.get('https://www.googleapis.com/youtube/v3/videos', query: query, follow_redirect: true).body)
 
-    unless res['items'].empty?
+    unless res['items'].blank?
       movie_info = res['items'][0]
 
       if movie_info['id'] == self.youtube_id
@@ -36,13 +36,14 @@ class Movie < ApplicationRecord
     query = {id: self.youtube_id, key: Rails.configuration.google_api_key, part: 'statistics'}
     res = JSON.parse(client.get('https://www.googleapis.com/youtube/v3/videos', query: query, follow_redirect: true).body)
 
-    unless res['items'].empty?
+    unless res['items'].blank?
       movie_info = res['items'][0]
 
       if movie_info['id'] == self.youtube_id
-        view = View.new
-        view.movie_id = self.id
+        view = View.today(self.id)
         view.count = movie_info['statistics']['viewCount'].to_i
+
+        p view
 
         if view.save
           return true
@@ -80,15 +81,19 @@ class Movie < ApplicationRecord
         query = {id: video_ids, key: Rails.configuration.google_api_key, part: 'statistics'}
         res = JSON.parse(client.get('https://www.googleapis.com/youtube/v3/videos', query: query, follow_redirect: true).body)
 
-        res['items'].each do |item|
-          code = item['id']
-          count = item['statistics']['viewCount'].to_i
+        if res['items']
+          res['items'].each do |item|
+            code = item['id']
+            count = item['statistics']['viewCount'].to_i
 
-          movie = Movie.find_by_youtube_id(code)
-          if movie
-            view = View.new(movie_id: movie.id, count: count)
-            if view.save
-              result[:success] += 1
+            movie = Movie.find_by_youtube_id(code)
+            if movie
+              view = View.today(movie.id)
+              view.count = count
+
+              if view.save
+                result[:success] += 1
+              end
             end
           end
         end
