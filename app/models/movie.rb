@@ -3,7 +3,7 @@ require 'json'
 
 class Movie < ApplicationRecord
   belongs_to :artist
-  has_many :views
+  has_many :views, dependent: :delete_all
 
   validates :youtube_id, presence: true
   validates :youtube_id, uniqueness: true
@@ -100,5 +100,9 @@ class Movie < ApplicationRecord
     end
 
     result
+  end
+
+  def self.export_as_csv
+
   end
 end

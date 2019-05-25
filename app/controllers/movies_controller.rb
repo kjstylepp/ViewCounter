@@ -33,6 +33,8 @@ class MoviesController < ApplicationController
   end
 
   def destroy
+    @movie.destroy
+
     redirect_to "/artists/#{@artist.id}", notice: "#{@movie.title}を削除しました"
   end
 
