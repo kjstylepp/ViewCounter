@@ -1,22 +1,27 @@
 <h1 class="h2">動画一覧</h1>
 
-<%= link_to '全動画の再生数更新', "/update_all_count", class: 'btn btn-primary btn-sm', method: :post %>
+<%= link_to '集計対象動画の再生数更新', "/update_counts", class: 'btn btn-primary btn-sm', method: :post %>
+<%= link_to '再生数履歴エクスポート', "/export_counts", class: 'btn btn-primary btn-sm' %>
+
+<div class="mb-3"></div>
 
 <div class="table-responsive">
   <table class="table table-striped table-sm">
     <thead>
     <tr>
+      <th>アーティスト</th>
       <th>サムネイル</th>
       <th>タイトル</th>
       <th>集計対象</th>
-      <th>最新の再生数</th>
-      <th>取得日</th>
+      <th>総再生数</th>
+      <th>更新日</th>
       <th></th>
     </tr>
     </thead>
     <tbody>
     <% @movies.each do |movie| %>
       <tr>
+        <td><%= movie.artist.name %></td>
         <td><%= thumb(movie.thumb_url) %></td>
         <td><%= link_to movie.title, "https://www.youtube.com/watch?v=#{movie.youtube_id}", target: '_blank' %></td>
         <td><%= movie_flag_text(movie.flag) %></td>

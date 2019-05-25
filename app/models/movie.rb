@@ -1,5 +1,5 @@
 require 'httpclient'
-require 'json'
+require 'csv'
 
 class Movie < ApplicationRecord
   belongs_to :artist
@@ -103,6 +103,44 @@ class Movie < ApplicationRecord
   end
 
   def self.export_as_csv
+    return nil if View.count.zero?
 
+    first_date = View.all.order(update_date: 'ASC').first.update_date
+    latest_date = View.all.order(update_date: 'DESC').first.update_date
+    lines = (latest_date - first_date + 1).to_i
+
+    movies = Movie.all
+
+    header = ['日付']
+    movies.each do |movie|
+      header << movie.title
+    end
+
+    csv_data = CSV.generate(headers: header, write_headers: true, force_quotes: true) do |csv|
+      pre_views = []
+      movies.each do
+        pre_views << 0
+      end
+
+      lines.times do |i|
+        date = first_date + i
+
+        line = [date]
+        movies.each_with_index do |movie, j|
+          view = View.find_by(movie_id: movie.id, update_date: date)
+
+          if view
+            line << view.count
+            pre_views[j] = view.count
+          else
+            line << pre_views[j]
+          end
+        end
+
+        csv << line
+      end
+    end
+
+    csv_data.encode(Encoding::SJIS)
   end
 end

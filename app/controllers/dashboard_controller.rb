@@ -2,11 +2,49 @@ class DashboardController < ApplicationController
   before_action :set_artist_and_movie, only: %i[count_history update_count]
 
   def index
-    @movies = Movie.page(params[:page])
+    @movies = Movie.order(artist_id: 'ASC').page(params[:page])
   end
 
   def count_history
     @views = @movie.views.order(update_date: 'DESC').page(params[:page])
+
+    views = @movie.views.order(update_date: 'ASC')
+
+    @date_list = []
+    @sum_list = []
+    @diff_list = []
+
+    diff_min_act = 0
+    diff_max_act = 0
+
+    views.each_with_index do |view, i|
+      @date_list << view.update_date.strftime('%Y年%m月%d日')
+      @sum_list << view.count
+      @diff_list << if i.zero?
+                      0
+                    else
+                      @sum_list[i] - @sum_list[i - 1]
+                    end
+
+      if i == 1
+        diff_min_act = @diff_list[1]
+        diff_max_act = @diff_list[1]
+      elsif i > 1
+        if @diff_list[i] < diff_min_act
+          diff_min_act = @diff_list[i]
+        else
+          diff_max_act = @diff_list[i]
+        end
+      end
+    end
+
+    @sum_step = 100_000
+    @sum_min = detect_min(@sum_list.first, @sum_list.last, @sum_step)
+    @sum_max = detect_max(@sum_list.first, @sum_list.last, @sum_step)
+
+    @diff_step = 1_000
+    @diff_min = detect_min(diff_min_act, diff_max_act, @diff_step)
+    @diff_max = detect_max(diff_min_act, diff_max_act, @diff_step)
   end
 
   def update_count
@@ -17,14 +55,20 @@ class DashboardController < ApplicationController
     end
   end
 
-  def update_all_count
+  def update_counts
     result = Movie.update_all_count
 
     redirect_to '/', notice: "全#{result[:all]}件の動画の#{result[:success]}件の再生数を更新しました"
   end
 
-  def export
+  def export_counts
+    csv = Movie.export_as_csv
 
+    if csv
+      send_data csv, type: 'text/csv; charset=shift_jis', filename: '再生数.csv'
+    else
+      redirect_to '/', alert: 'エクスポートできるデータがありません'
+    end
   end
 
   def login
@@ -57,5 +101,21 @@ class DashboardController < ApplicationController
     @movie = Movie.find_by_id(params[:id])
 
     redirect_to '/', alert: '不正な画面遷移です' if @movie.nil? || @movie.artist_id != artist.id
+  end
+
+  def detect_min(min_act, max_act, step)
+    range = max_act - min_act
+
+    min = if (min_act - range / 10).positive?
+            (((min_act - range / 10) / step).ceil - 1) * step
+          else
+            0
+          end
+  end
+
+  def detect_max(min_act, max_act, step)
+    range = max_act - min_act
+
+    (((max_act + range / 10) / step).floor + 1) * step
   end
 end

@@ -1,17 +1,36 @@
-<h1 class="h2"><%= @movie.title %>の再生数履歴</h1>
+<h1 class="h2">再生数履歴</h1>
 
 <div class="table-responsive">
   <table class="table table-striped table-sm">
     <thead>
     <tr>
-      <th>取得日</th>
-      <th>再生数</th>
+      <th>アーティスト</th>
+      <th>サムネイル</th>
+      <th>タイトル</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @movie.artist.name %></td>
+        <td><%= thumb(@movie.thumb_url) %></td>
+        <td><%= @movie.title %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+    <tr>
+      <th>更新日</th>
+      <th>総再生数</th>
     </tr>
     </thead>
     <tbody>
     <% @views.each do |view| %>
       <tr>
-        <td><%= view.update_date %></td>
+        <td><%= view.update_date.strftime('%Y年%m月%d日') %></td>
         <td><%= view.count %></td>
       </tr>
     <% end %>
@@ -19,3 +38,64 @@
   </table>
   <%= paginate @views %>
 </div>
+
+<% unless @views.blank? %>
+<canvas id="myChart"></canvas>
+
+<script src="/Chart.min.js"></script>
+<script type="text/javascript">
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <%= @date_list.to_json.html_safe %>,
+            datasets: [{
+                label: '総再生数',
+                type: "line",
+                fill: false,
+                data: <%= @sum_list.to_json %>,
+                borderColor: "gray",
+                backgroundColor: "gray",
+                yAxisID: "sum",
+            }, {
+                label: '再生数',
+                data: <%= @diff_list.to_json %>,
+                borderColor: "rgba(15, 15, 15, 0.2)",
+                backgroundColor: "rgba(15, 15, 15, 0.2)",
+                yAxisID: "diff",
+            }]
+        },
+        options: {
+            tooltips: {
+                mode: 'nearest',
+                intersect: false,
+            },
+            responsive: true,
+            scales: {
+                yAxes: [{
+                    id: "sum",
+                    type: "linear",
+                    position: "left",
+                    ticks: {
+                        max: <%= @sum_max %>,
+                        min: <%= @sum_min %>,
+                        stepSize: <%= @sum_step %>
+                    },
+                }, {
+                    id: "diff",
+                    type: "linear",
+                    position: "right",
+                    ticks: {
+                        max: <%= @diff_max %>,
+                        min: <%= @diff_min %>,
+                        stepSize: <%= @diff_step %>
+                    },
+                    gridLines: {
+                        drawOnChartArea: false,
+                    },
+                }],
+            },
+        }
+    });
+</script>
+<% end %>

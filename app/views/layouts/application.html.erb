@@ -60,7 +60,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/artists">
                 <span data-feather="file"></span>
-                アーティスト一覧
+                アーティストと動画の管理
               </a>
             </li>
           </ul>
@@ -68,11 +68,13 @@
       </nav>
 
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="mb-3"></div>
         <%= show_flash %>
         <%= yield %>
       </main>
     <% else %>
       <main role="main" class="col-md-9 ml-sm-auto col-lg-12 px-4">
+        <div class="mb-3"></div>
         <%= show_flash %>
         <%= yield %>
       </main>
