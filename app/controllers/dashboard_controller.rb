@@ -107,7 +107,11 @@ class DashboardController < ApplicationController
     range = max_act - min_act
 
     min = if (min_act - range / 10).positive?
-            (((min_act - range / 10) / step).ceil - 1) * step
+            if ((min_act - range / 10) / step).ceil > 1
+              (((min_act - range / 10) / step).ceil - 1) * step
+            else
+              0
+            end
           else
             0
           end
