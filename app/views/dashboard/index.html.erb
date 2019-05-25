@@ -1,15 +1,3 @@
-<% if flash[:notice] %>
-  <div class="alert alert-success" role="alert">
-    <%= flash[:notice] %>
-  </div>
-<% end %>
-
-<% if flash[:alert] %>
-  <div class="alert alert-danger" role="alert">
-    <%= flash[:alert] %>
-  </div>
-<% end %>
-
 <h1 class="h2">動画一覧</h1>
 
 <%= link_to '全動画の再生数更新', "/update_all_count", class: 'btn btn-primary btn-sm', method: :post %>
@@ -20,6 +8,7 @@
     <tr>
       <th>サムネイル</th>
       <th>タイトル</th>
+      <th>集計対象</th>
       <th>最新の再生数</th>
       <th>取得日</th>
       <th></th>
@@ -28,25 +17,15 @@
     <tbody>
     <% @movies.each do |movie| %>
       <tr>
-        <td>
-          <% if movie.thumb_url %>
-            <img border="0" src=<%= movie.thumb_url %>>
-          <% else %>
-            （サムネ画像なし）
-          <% end %>
-        </td>
+        <td><%= thumb(movie.thumb_url) %></td>
         <td><%= link_to movie.title, "https://www.youtube.com/watch?v=#{movie.youtube_id}", target: '_blank' %></td>
-        <% latest_view = movie.views.order(update_date: 'DESC').first %>
-        <% if latest_view %>
-          <td><%= latest_view.count %></td>
-          <td><%= latest_view.update_date %></td>
-        <% else %>
-          <td>-</td>
-          <td>-</td>
-        <% end %>
+        <td><%= movie_flag_text(movie.flag) %></td>
+        <%= latest_view_count(movie) %>
         <td>
           <%= link_to '再生数履歴', "/artists/#{movie.artist.id}/movies/#{movie.id}/views", class: 'btn btn-secondary btn-sm' %>
-          <%= link_to '再生数更新', "/artists/#{movie.artist.id}/movies/#{movie.id}/update_count", class: 'btn btn-secondary btn-sm', method: :post %>
+          <% if movie.flag %>
+            <%= link_to '再生数更新', "/artists/#{movie.artist.id}/movies/#{movie.id}/update_count", class: 'btn btn-secondary btn-sm', method: :post %>
+          <% end %>
         </td>
       </tr>
     <% end %>

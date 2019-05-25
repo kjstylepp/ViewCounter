@@ -8,98 +8,97 @@ class Movie < ApplicationRecord
   validates :youtube_id, presence: true
   validates :youtube_id, uniqueness: true
   validates :title, presence: true
+  validates :flag, inclusion: { in: [true, false] }
 
   def import_data
-    unless self.youtube_id
-      return
-    end
-
     client = HTTPClient.new
-    query = {id: self.youtube_id, key: Rails.configuration.google_api_key, part: 'snippet'}
+    query = { id: youtube_id, key: Rails.configuration.google_api_key, part: 'snippet,statistics' }
     res = JSON.parse(client.get('https://www.googleapis.com/youtube/v3/videos', query: query, follow_redirect: true).body)
 
-    unless res['items'].blank?
-      movie_info = res['items'][0]
+    return false if res['items'].blank?
 
-      if movie_info['id'] == self.youtube_id
-        self.title = movie_info['snippet']['title']
+    movie_info = res['items'][0]
 
-        if movie_info['snippet']['thumbnails']['default']
-          self.thumb_url = movie_info['snippet']['thumbnails']['default']['url']
-        end
-      end
-    end
+    return false unless movie_info['id'] == youtube_id
+
+    self.title = movie_info['snippet']['title']
+    self.thumb_url = movie_info['snippet']['thumbnails']['default']['url'] if movie_info['snippet']['thumbnails']['default']
+
+    return false unless save
+
+    view = View.find_or_create_by(movie_id: id, update_date: Date.today)
+    view.count = movie_info['statistics']['viewCount'].to_i
+
+    view.save
+
+    true
   end
 
   def update_count
+    return false unless flag
+
     client = HTTPClient.new
-    query = {id: self.youtube_id, key: Rails.configuration.google_api_key, part: 'statistics'}
+    query = { id: youtube_id, key: Rails.configuration.google_api_key, part: 'statistics' }
     res = JSON.parse(client.get('https://www.googleapis.com/youtube/v3/videos', query: query, follow_redirect: true).body)
 
-    unless res['items'].blank?
-      movie_info = res['items'][0]
+    return false if res['items'].blank?
 
-      if movie_info['id'] == self.youtube_id
-        view = View.today(self.id)
-        view.count = movie_info['statistics']['viewCount'].to_i
+    movie_info = res['items'][0]
 
-        p view
+    return false unless movie_info['id'] == youtube_id
 
-        if view.save
-          return true
-        end
-      end
-    end
+    view = View.find_or_create_by(movie_id: id, update_date: Date.today)
+    view.count = movie_info['statistics']['viewCount'].to_i
 
-    return false
+    view.save
   end
 
   def self.update_all_count
-    movies = Movie.all
+    movies = Movie.where(flag: true)
 
     result = {}
     result[:all] = movies.size
     result[:success] = 0
 
-    if movies.size > 0
-      client = HTTPClient.new
+    return result if movies.empty?
 
-      loop_number = ( movies.size - 1 ) / 50 + 1
+    client = HTTPClient.new
+    loop_number = (movies.size - 1) / 50 + 1
+    today_date = Date.today
 
-      loop_number.times do |i|
-        video_ids = ''
-        50.times do |j|
-          if movies[i * 50 + j]
-            if j == 0
-              video_ids = movies[i * 50 + j].youtube_id
-            else
-              video_ids = video_ids + ',' + movies[i * 50 + j].youtube_id
-            end
-          end
-        end
+    loop_number.times do |i|
+      video_ids = ''
 
-        query = {id: video_ids, key: Rails.configuration.google_api_key, part: 'statistics'}
-        res = JSON.parse(client.get('https://www.googleapis.com/youtube/v3/videos', query: query, follow_redirect: true).body)
+      50.times do |j|
+        next unless movies[i * 50 + j]
 
-        if res['items']
-          res['items'].each do |item|
-            code = item['id']
-            count = item['statistics']['viewCount'].to_i
+        video_ids = if j.zero?
+                      movies[i * 50 + j].youtube_id
+                    else
+                      video_ids + ',' + movies[i * 50 + j].youtube_id
+                    end
+      end
 
-            movie = Movie.find_by_youtube_id(code)
-            if movie
-              view = View.today(movie.id)
-              view.count = count
+      query = { id: video_ids, key: Rails.configuration.google_api_key, part: 'statistics' }
+      res = JSON.parse(client.get('https://www.googleapis.com/youtube/v3/videos', query: query, follow_redirect: true).body)
 
-              if view.save
-                result[:success] += 1
-              end
-            end
-          end
-        end
+      break if res['items'].blank?
+
+      res['items'].each do |item|
+        code = item['id']
+        count = item['statistics']['viewCount'].to_i
+
+        movie = Movie.find_by_youtube_id(code)
+
+        next unless movie
+
+        view = View.find_or_create_by(movie_id: movie.id, update_date: today_date)
+        view.count = count
+
+        result[:success] += 1 if view.save
       end
     end
 
-    return result
+    result
   end
 end

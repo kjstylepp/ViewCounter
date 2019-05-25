@@ -1,7 +1,7 @@
 class ArtistsController < ApplicationController
   include SessionManager
 
-  before_action :set_artist, only: [:show, :edit, :update, :destroy]
+  before_action :set_artist, only: %i[show edit update destroy]
 
   def index
     @artists = Artist.page(params[:page])
@@ -23,8 +23,7 @@ class ArtistsController < ApplicationController
     @new_movie = Movie.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @artist.update(artist_params)
@@ -39,12 +38,11 @@ class ArtistsController < ApplicationController
   end
 
   private
+
   def set_artist
     @artist = Artist.find_by_id(params[:id])
 
-    if @artist.nil?
-      redirect_to '/', alert: '不正な画面遷移です'
-    end
+    redirect_to '/', alert: '不正な画面遷移です' if @artist.nil?
   end
 
   def artist_params

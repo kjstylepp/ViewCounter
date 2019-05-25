@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2019_05_17_040438) do
     t.string "title"
     t.integer "artist_id"
     t.string "thumb_url"
+    t.boolean "flag"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["artist_id"], name: "index_movies_on_artist_id"

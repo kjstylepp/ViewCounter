@@ -1,9 +1,3 @@
-<% if flash[:alert] %>
-  <div class="alert alert-danger" role="alert">
-    <%= flash[:alert] %>
-  </div>
-<% end %>
-
 <h1 class="h2">アーティスト名更新</h1>
 
 <%= form_with model: @artist, url: "/artists/#{@artist.id}" do |form| %>

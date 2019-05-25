@@ -5,6 +5,7 @@ class CreateMovies < ActiveRecord::Migration[5.2]
       t.string :title
       t.references :artist, foreign_key: true
       t.string :thumb_url
+      t.boolean :flag
 
       t.timestamps
     end

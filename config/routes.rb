@@ -19,5 +19,7 @@ Rails.application.routes.draw do
   delete '/artists/:id/destroy', to: 'artists#destroy'
 
   post '/artists/:artist_id/movies', to: 'movies#create'
+  post '/artists/:artist_id/movies/:id/disable', to: 'movies#disable_flag'
+  post '/artists/:artist_id/movies/:id/enable', to: 'movies#enable_flag'
   delete '/artists/:artist_id/movies/:id/destroy', to: 'movies#destroy'
 end

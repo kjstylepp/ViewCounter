@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
-  before_action :set_artist_and_movie, only: [:count_history, :update_count]
+  before_action :set_artist_and_movie, only: %i[count_history update_count]
 
   def index
     @movies = Movie.page(params[:page])
@@ -32,7 +32,7 @@ class DashboardController < ApplicationController
   end
 
   def create_admin_session
-    if 'password' == params[:password]
+    if params[:password] == 'password'
       session[:admin_session] = 'admin_session'
 
       redirect_to '/', notice: 'ログインに成功しました'
@@ -48,17 +48,14 @@ class DashboardController < ApplicationController
   end
 
   private
+
   def set_artist_and_movie
     artist = Artist.find_by_id(params[:artist_id])
 
-    if artist.nil?
-      redirect_to '/', alert: '不正な画面遷移です'
-    end
+    redirect_to '/', alert: '不正な画面遷移です' if artist.nil?
 
     @movie = Movie.find_by_id(params[:id])
 
-    if @movie.nil? || @movie.artist_id != artist.id
-      redirect_to '/', alert: '不正な画面遷移です'
-    end
+    redirect_to '/', alert: '不正な画面遷移です' if @movie.nil? || @movie.artist_id != artist.id
   end
 end
