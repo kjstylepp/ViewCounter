@@ -54,10 +54,17 @@ class DashboardController < ApplicationController
   end
 
   def export_counts
-    csv = Movie.export_as_csv
+    @artists_list = { '全アーティスト' => nil }
+    Artist.all.each do |artist|
+      @artists_list.store artist.name, artist.id unless artist.movies.empty?
+    end
+  end
+
+  def do_export_counts
+    csv = Movie.export_as_csv(params[:artist])
 
     if csv
-      send_data csv, type: 'text/csv; charset=shift_jis', filename: '再生数.csv'
+      send_data csv, type: 'text/csv; charset=shift_jis', filename: '再生数履歴.csv'
     else
       redirect_to '/', alert: 'エクスポートできるデータがありません'
     end

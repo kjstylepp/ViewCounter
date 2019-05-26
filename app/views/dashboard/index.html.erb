@@ -1,7 +1,7 @@
 <h1 class="h2">動画一覧</h1>
 
-<%= link_to '再生数履歴エクスポート', "/export_counts", class: 'btn btn-primary btn-sm' %>
-<%= link_to '手動で再生数更新', "/update_counts", class: 'btn btn-secondary btn-sm', method: :post %>
+<%= link_to '再生数履歴をエクスポート', '/export_counts', remote: true, class: 'btn btn-primary btn-sm' %>
+<%= link_to '手動で再生数更新', '/update_counts', class: 'btn btn-secondary btn-sm', method: :post %>
 
 <div class="mb-3"></div>
 
@@ -35,3 +35,5 @@
   </table>
   <%= paginate @movies %>
 </div>
+
+<div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>

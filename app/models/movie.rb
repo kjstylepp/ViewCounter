@@ -85,14 +85,30 @@ class Movie < ApplicationRecord
     result
   end
 
-  def self.export_as_csv
-    return nil if View.count.zero?
+  def self.export_as_csv(artist_id)
+    movies = nil
+    first_date = nil
+    latest_date = nil
 
-    first_date = View.all.order(update_date: 'ASC').first.update_date
-    latest_date = View.all.order(update_date: 'DESC').first.update_date
+    if artist_id.blank?
+      movies = Movie.all
+      first_date = View.all.order(update_date: 'ASC').first.update_date
+      latest_date = View.all.order(update_date: 'DESC').first.update_date
+    else
+      movies = Movie.where(artist_id: artist_id)
+
+      return nil if movies.empty?
+
+      movie_ids = []
+      movies.each do |movie|
+        movie_ids << movie.id
+      end
+
+      first_date = View.where(movie_id: movie_ids).order(update_date: 'ASC').first.update_date
+      latest_date = View.where(movie_id: movie_ids).order(update_date: 'DESC').first.update_date
+    end
+
     lines = (latest_date - first_date + 1).to_i
-
-    movies = Movie.all
 
     header = ['日付']
     movies.each do |movie|
