@@ -93,4 +93,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.google_api_key = ENV['WACATE2019S_KEY']
+  config.allow_manual_update = ENV['ALLOW_MANUAL_UPDATE']
 end

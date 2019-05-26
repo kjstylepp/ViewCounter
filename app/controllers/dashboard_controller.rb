@@ -48,9 +48,13 @@ class DashboardController < ApplicationController
   end
 
   def update_counts
-    result = Movie.update_all_count
+    if Rails.configuration.allow_manual_update
+      result = Movie.update_all_count
 
-    redirect_to '/', notice: "全#{result[:all]}件の動画の#{result[:success]}件の再生数を更新しました"
+      redirect_to '/', notice: "全#{result[:all]}件の動画の#{result[:success]}件の再生数を更新しました"
+    else
+      redirect_to '/', alert: '手動での更新は現在許可されていません'
+    end
   end
 
   def export_counts

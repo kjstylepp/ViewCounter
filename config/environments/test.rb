@@ -45,4 +45,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.google_api_key = ENV['WACATE2019S_KEY']
+  config.allow_manual_update = true
 end
