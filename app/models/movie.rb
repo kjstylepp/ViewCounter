@@ -10,6 +10,8 @@ class Movie < ApplicationRecord
   validates :title, presence: true
   validates :flag, inclusion: { in: [true, false] }
 
+  paginates_per 10
+
   def import_data
     client = HTTPClient.new
     query = { id: youtube_id, key: Rails.configuration.google_api_key, part: 'snippet,statistics' }

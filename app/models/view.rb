@@ -3,4 +3,6 @@ class View < ApplicationRecord
 
   validates :count, presence: true
   validates :update_date, presence: true
+
+  paginates_per 10
 end
