@@ -34,25 +34,6 @@ class Movie < ApplicationRecord
     true
   end
 
-  def update_count
-    return false unless flag
-
-    client = HTTPClient.new
-    query = { id: youtube_id, key: Rails.configuration.google_api_key, part: 'statistics' }
-    res = JSON.parse(client.get('https://www.googleapis.com/youtube/v3/videos', query: query, follow_redirect: true).body)
-
-    return false if res['items'].blank?
-
-    movie_info = res['items'][0]
-
-    return false unless movie_info['id'] == youtube_id
-
-    view = View.find_or_create_by(movie_id: id, update_date: Date.today)
-    view.count = movie_info['statistics']['viewCount'].to_i
-
-    view.save
-  end
-
   def self.update_all_count
     movies = Movie.where(flag: true)
 

@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   root to: 'dashboard#index'
 
   get '/artists/:artist_id/movies/:id/views', to: 'dashboard#count_history'
-  post '/artists/:artist_id/movies/:id/update_count', to: 'dashboard#update_count'
   post '/update_counts', to: 'dashboard#update_counts'
   get '/export_counts', to: 'dashboard#export_counts'
 

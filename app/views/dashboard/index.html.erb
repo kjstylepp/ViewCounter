@@ -1,7 +1,7 @@
 <h1 class="h2">動画一覧</h1>
 
-<%= link_to '集計対象動画の再生数更新', "/update_counts", class: 'btn btn-primary btn-sm', method: :post %>
 <%= link_to '再生数履歴エクスポート', "/export_counts", class: 'btn btn-primary btn-sm' %>
+<%= link_to '手動で再生数更新', "/update_counts", class: 'btn btn-secondary btn-sm', method: :post %>
 
 <div class="mb-3"></div>
 
@@ -28,9 +28,6 @@
         <%= latest_view_count(movie) %>
         <td>
           <%= link_to '再生数履歴', "/artists/#{movie.artist.id}/movies/#{movie.id}/views", class: 'btn btn-secondary btn-sm' %>
-          <% if movie.flag %>
-            <%= link_to '再生数更新', "/artists/#{movie.artist.id}/movies/#{movie.id}/update_count", class: 'btn btn-secondary btn-sm', method: :post %>
-          <% end %>
         </td>
       </tr>
     <% end %>

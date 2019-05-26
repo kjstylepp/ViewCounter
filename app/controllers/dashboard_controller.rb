@@ -47,14 +47,6 @@ class DashboardController < ApplicationController
     @diff_max = detect_max(diff_min_act, diff_max_act, @diff_step)
   end
 
-  def update_count
-    if @movie.update_count
-      redirect_to '/', notice: "#{@movie.title}の再生数を更新しました"
-    else
-      redirect_to '/', alert: "#{@movie.title}の再生数を更新できませんでした"
-    end
-  end
-
   def update_counts
     result = Movie.update_all_count
 
