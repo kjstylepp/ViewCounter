@@ -65,7 +65,35 @@ class DashboardController < ApplicationController
   end
 
   def do_export_counts
-    csv = Movie.export_as_csv(params[:artist])
+    artist_id = params[:artist] unless params[:artist].blank?
+
+    start_date = nil
+    end_date = nil
+
+    unless params[:start_date].blank?
+      begin
+        start_date = Date.parse params[:start_date]
+      rescue ArgumentError
+        redirect_to '/', alert: '指定した日付が不正です'
+        return
+      end
+    end
+
+    unless params[:end_date].blank?
+      begin
+        end_date = Date.parse params[:end_date]
+      rescue ArgumentError
+        redirect_to '/', alert: '指定した日付が不正です'
+        return
+      end
+    end
+
+    if start_date && end_date && start_date > end_date
+      redirect_to '/', alert: '集計開始日は終了日以前を指定してください'
+      return
+    end
+
+    csv = Movie.export_as_csv(artist_id, start_date, end_date)
 
     if csv
       send_data csv, type: 'text/csv; charset=shift_jis', filename: '再生数履歴.csv'
