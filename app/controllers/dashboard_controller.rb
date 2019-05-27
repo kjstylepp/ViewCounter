@@ -8,8 +8,6 @@ class DashboardController < ApplicationController
   def count_history
     @views = @movie.views.order(update_date: 'DESC').page(params[:page])
 
-    views = @movie.views.order(update_date: 'ASC')
-
     @date_list = []
     @sum_list = []
     @diff_list = []
@@ -17,7 +15,7 @@ class DashboardController < ApplicationController
     diff_min_act = 0
     diff_max_act = 0
 
-    views.each_with_index do |view, i|
+    @views.reverse.each_with_index do |view, i|
       @date_list << view.update_date.strftime('%Y年%m月%d日')
       @sum_list << view.count
       @diff_list << if i.zero?
@@ -135,22 +133,14 @@ class DashboardController < ApplicationController
   end
 
   def detect_min(min_act, max_act, step)
-    range = max_act - min_act
-
-    min = if (min_act - range / 10).positive?
-            if ((min_act - range / 10) / step).ceil > 1
-              (((min_act - range / 10) / step).ceil - 1) * step
-            else
-              0
-            end
-          else
-            0
-          end
+    if (min_act / step).positive?
+      (min_act / step) * step
+    else
+      0
+    end
   end
 
   def detect_max(min_act, max_act, step)
-    range = max_act - min_act
-
-    (((max_act + range / 10) / step).floor + 1) * step
+    (max_act / step + 1) * step
   end
 end
