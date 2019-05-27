@@ -55,45 +55,35 @@
                 data: <%= @sum_list.to_json %>,
                 borderColor: "gray",
                 backgroundColor: "gray",
-                yAxisID: "sum",
+                yAxisID: "sum"
             }, {
                 label: '再生数',
                 data: <%= @diff_list.to_json %>,
                 borderColor: "rgba(15, 15, 15, 0.2)",
                 backgroundColor: "rgba(15, 15, 15, 0.2)",
-                yAxisID: "diff",
+                yAxisID: "diff"
             }]
         },
         options: {
             tooltips: {
                 mode: 'nearest',
-                intersect: false,
+                intersect: false
             },
             responsive: true,
             scales: {
                 yAxes: [{
                     id: "sum",
                     type: "linear",
-                    position: "left",
-                    ticks: {
-                        max: <%= @sum_max %>,
-                        min: <%= @sum_min %>,
-                        stepSize: <%= @sum_step %>
-                    },
+                    position: "left"
                 }, {
                     id: "diff",
                     type: "linear",
                     position: "right",
-                    ticks: {
-                        max: <%= @diff_max %>,
-                        min: <%= @diff_min %>,
-                        stepSize: <%= @diff_step %>
-                    },
                     gridLines: {
-                        drawOnChartArea: false,
-                    },
-                }],
-            },
+                        drawOnChartArea: false
+                    }
+                }]
+            }
         }
     });
 </script>

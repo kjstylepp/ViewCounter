@@ -12,9 +12,6 @@ class DashboardController < ApplicationController
     @sum_list = []
     @diff_list = []
 
-    diff_min_act = 0
-    diff_max_act = 0
-
     @views.reverse.each_with_index do |view, i|
       @date_list << view.update_date.strftime('%Y年%m月%d日')
       @sum_list << view.count
@@ -23,26 +20,7 @@ class DashboardController < ApplicationController
                     else
                       @sum_list[i] - @sum_list[i - 1]
                     end
-
-      if i == 1
-        diff_min_act = @diff_list[1]
-        diff_max_act = @diff_list[1]
-      elsif i > 1
-        if @diff_list[i] < diff_min_act
-          diff_min_act = @diff_list[i]
-        else
-          diff_max_act = @diff_list[i]
-        end
-      end
     end
-
-    @sum_step = 100_000
-    @sum_min = detect_min(@sum_list.first, @sum_list.last, @sum_step)
-    @sum_max = detect_max(@sum_list.first, @sum_list.last, @sum_step)
-
-    @diff_step = 1_000
-    @diff_min = detect_min(diff_min_act, diff_max_act, @diff_step)
-    @diff_max = detect_max(diff_min_act, diff_max_act, @diff_step)
   end
 
   def update_counts
@@ -130,17 +108,5 @@ class DashboardController < ApplicationController
     @movie = Movie.find_by_id(params[:id])
 
     redirect_to '/', alert: '不正な画面遷移です' if @movie.nil? || @movie.artist_id != artist.id
-  end
-
-  def detect_min(min_act, max_act, step)
-    if (min_act / step).positive?
-      (min_act / step) * step
-    else
-      0
-    end
-  end
-
-  def detect_max(min_act, max_act, step)
-    (max_act / step + 1) * step
   end
 end
