@@ -5,7 +5,11 @@ class MoviesController < ApplicationController
   before_action :set_movie, only: %i[disable_flag enable_flag destroy]
 
   def create
-    @movie = Movie.new(movie_params)
+    youtube_regex = /(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+    redirect_to "/artists/#{@artist.id}", alert: '動画を新規登録できませんでした' unless params[:youtube_url] =~ youtube_regex
+
+    @movie = Movie.new
+    @movie.youtube_id = $1
     @movie.artist_id = @artist.id
     @movie.flag = true
 
@@ -50,9 +54,5 @@ class MoviesController < ApplicationController
     @movie = Movie.find_by_id(params[:id])
 
     redirect_to '/', alert: '不正な画面遷移です' if @movie.nil? || @movie.artist_id != @artist.id
-  end
-
-  def movie_params
-    params.require(:movie).permit(:youtube_id)
   end
 end

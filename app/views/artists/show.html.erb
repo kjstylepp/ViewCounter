@@ -17,9 +17,9 @@
 
 <h5>新規動画登録</h5>
 
-<%= form_with model: @new_movie, url: "/artists/#{@artist.id}/movies" do |form| %>
+<%= form_with url: "/artists/#{@artist.id}/movies" do |form| %>
   <div class="field">
-    <%= form.text_field :youtube_id, class: 'form-control', placeholder: 'Youtubeの動画ID', required: true%>
+    <%= form.text_field :youtube_url, class: 'form-control', placeholder: 'Youtubeの動画URL', required: true%>
   </div>
   <div class="checkbox mb-1"></div>
   <button class="btn btn-primary btn-sm" type="submit">登録</button>
