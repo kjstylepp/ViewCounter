@@ -7,14 +7,6 @@ module ApplicationHelper
     end
   end
 
-  def movie_flag_text(flag)
-    if flag
-      '○'
-    else
-      '×'
-    end
-  end
-
   def thumb(url)
     if url
       image_tag url, border: 0

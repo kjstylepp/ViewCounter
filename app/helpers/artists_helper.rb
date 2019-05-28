@@ -14,4 +14,12 @@ module ArtistsHelper
       "/artists/#{movie.artist.id}/movies/#{movie.id}/enable"
     end
   end
+
+  def movie_flag_text(flag)
+    if flag
+      '○'
+    else
+      '×'
+    end
+  end
 end

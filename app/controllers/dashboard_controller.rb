@@ -8,11 +8,7 @@ class DashboardController < ApplicationController
                          params[:artist]
                        end
 
-    @checked = if params[:flag] == 'true'
-                       true
-                     else
-                       false
-                     end
+    @checked = params[:flag] == 'true'
 
     @artists_list = { '全アーティスト' => nil }
     Artist.all.each do |artist|

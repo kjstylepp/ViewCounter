@@ -1,4 +1,14 @@
 module DashboardHelper
+  def artist_view(artist, selected_artist, checked)
+    if selected_artist
+      artist.name
+    elsif checked
+      link_to artist.name, "/?artist=#{artist.id}&flag=true"
+    else
+      link_to artist.name, "/?artist=#{artist.id}"
+    end
+  end
+
   def latest_view_count(movie)
     latest_view = movie.views.order(update_date: 'DESC').first
 
