@@ -2,7 +2,28 @@ class DashboardController < ApplicationController
   before_action :set_artist_and_movie, only: %i[count_history update_count]
 
   def index
-    @movies = Movie.order(artist_id: 'ASC').page(params[:page])
+    @selected_artist = if params[:artist].blank?
+                         nil
+                       else
+                         params[:artist]
+                       end
+
+    @checked = if params[:flag] == 'true'
+                       true
+                     else
+                       false
+                     end
+
+    @artists_list = { '全アーティスト' => nil }
+    Artist.all.each do |artist|
+      @artists_list.store artist.name, artist.id unless artist.movies.empty?
+    end
+
+    movies = Movie.all.order(created_at: 'DESC')
+    movies = movies.where(artist_id: @selected_artist) if @selected_artist
+    movies = movies.where(flag: true) unless @checked
+
+    @movies = movies.page(params[:page])
   end
 
   def count_history
@@ -42,6 +63,7 @@ class DashboardController < ApplicationController
 
   def do_export_counts
     artist_id = params[:artist] unless params[:artist].blank?
+    checked = true if params[:flag] == 'true'
 
     start_date = nil
     end_date = nil
@@ -69,7 +91,7 @@ class DashboardController < ApplicationController
       return
     end
 
-    csv = Movie.export_as_csv(artist_id, start_date, end_date)
+    csv = Movie.export_as_csv(artist_id, checked, start_date, end_date)
 
     if csv
       send_data csv, type: 'text/csv; charset=shift_jis', filename: '再生数履歴.csv'
