@@ -19,24 +19,24 @@
   <table class="table table-striped table-sm">
     <thead>
     <tr>
-      <th>アーティスト</th>
-      <th>サムネイル</th>
+      <th class="nowrap">アーティスト</th>
+      <th class="nowrap">サムネイル</th>
       <th>タイトル</th>
-      <th>公開日</th>
-      <th>再生数</th>
-      <th>更新日</th>
+      <th class="nowrap">公開日</th>
+      <th class="nowrap">再生数</th>
+      <th class="nowrap">更新日</th>
       <th></th>
     </tr>
     </thead>
     <tbody>
     <% @movies.each do |movie| %>
       <tr>
-        <td><%= artist_view(movie.artist, @selected_artist, @checked) %></td>
-        <td><%= thumb(movie.thumb_url) %></td>
+        <td class="nowrap"><%= artist_view(movie.artist, @selected_artist, @checked) %></td>
+        <td class="nowrap"><%= thumb(movie.thumb_url) %></td>
         <td><%= link_to movie.title, "https://www.youtube.com/watch?v=#{movie.youtube_id}", target: '_blank' %></td>
-        <td><%= movie.published_at.strftime('%Y年%m月%d日') %></td>
+        <td class="nowrap"><%= movie.published_at.strftime('%Y年%m月%d日') %></td>
         <%= latest_view_count(movie) %>
-        <td>
+        <td class="nowrap">
           <%= link_to '再生数履歴', "/artists/#{movie.artist.id}/movies/#{movie.id}/views", class: 'btn btn-secondary btn-sm' %>
         </td>
       </tr>

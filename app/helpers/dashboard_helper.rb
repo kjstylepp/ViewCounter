@@ -13,9 +13,9 @@ module DashboardHelper
     latest_view = movie.views.order(update_date: 'DESC').first
 
     if latest_view
-      tag.td(latest_view.count) + tag.td(latest_view.update_date.strftime('%Y年%m月%d日'))
+      tag.td(latest_view.count, class: 'nowrap') + tag.td(latest_view.update_date.strftime('%Y年%m月%d日'), class: 'nowrap')
     else
-      tag.td('-') + tag.td('-')
+      tag.td('-', class: 'nowrap') + tag.td('-', class: 'nowrap')
     end
   end
 

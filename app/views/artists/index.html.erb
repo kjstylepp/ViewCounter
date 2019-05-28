@@ -16,17 +16,17 @@
   <table class="table table-striped table-sm">
     <thead>
     <tr>
-      <th>アーティスト名</th>
-      <th>登録動画数</th>
+      <th class="nowrap">アーティスト名</th>
+      <th class="nowrap">登録動画数</th>
       <th></th>
     </tr>
     </thead>
     <tbody>
     <% @artists.each do |artist| %>
       <tr>
-        <td><%= link_to artist.name, "/artists/#{artist.id}" %></td>
-        <td><%= artist.movies.size %></td>
-        <td>
+        <td class="nowrap"><%= link_to artist.name, "/artists/#{artist.id}" %></td>
+        <td class="nowrap"><%= artist.movies.size %></td>
+        <td class="nowrap">
           <%= link_to '編集', "/artists/#{artist.id}/edit", class: 'btn btn-secondary btn-sm' %>
           <%= link_to '削除', "/artists/#{artist.id}/destroy", class: 'btn btn-danger btn-sm', method: :delete, data: { confirm: "本当に#{artist.name}を削除しますか？" } %>
         </td>

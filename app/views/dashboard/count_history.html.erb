@@ -4,15 +4,15 @@
   <table class="table table-striped table-sm">
     <thead>
     <tr>
-      <th>アーティスト</th>
-      <th>サムネイル</th>
-      <th>タイトル</th>
+      <th class="nowrap">アーティスト</th>
+      <th class="nowrap">サムネイル</th>
+      <th class="nowrap">タイトル</th>
     </tr>
     </thead>
     <tbody>
       <tr>
-        <td><%= @movie.artist.name %></td>
-        <td><%= thumb(@movie.thumb_url) %></td>
+        <td class="nowrap"><%= @movie.artist.name %></td>
+        <td class="nowrap"><%= thumb(@movie.thumb_url) %></td>
         <td><%= @movie.title %></td>
       </tr>
     </tbody>
@@ -23,17 +23,17 @@
   <table class="table table-striped table-sm">
     <thead>
     <tr>
-      <th>更新日</th>
-      <th>再生数</th>
-      <th>前日からの増加分</th>
+      <th class="nowrap">更新日</th>
+      <th class="nowrap">再生数</th>
+      <th class="nowrap">前日からの増加分</th>
     </tr>
     </thead>
     <tbody>
     <% @views.each_with_index do |view, i| %>
       <tr>
-        <td><%= view.update_date.strftime('%Y年%m月%d日') %></td>
-        <td><%= view.count %></td>
-        <td><%= @diff_list.reverse[i] %></td>
+        <td class="nowrap"><%= view.update_date.strftime('%Y年%m月%d日') %></td>
+        <td class="nowrap"><%= view.count %></td>
+        <td class="nowrap"><%= @diff_list.reverse[i] %></td>
       </tr>
     <% end %>
     </tbody>

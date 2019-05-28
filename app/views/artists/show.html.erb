@@ -4,12 +4,12 @@
   <table class="table table-striped table-sm">
     <thead>
     <tr>
-      <th>アーティスト</th>
+      <th class="nowrap">アーティスト</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-      <td><%= @artist.name %></td>
+      <td class="nowrap"><%= @artist.name %></td>
     </tr>
     </tbody>
   </table>
@@ -31,21 +31,21 @@
   <table class="table table-striped table-sm">
     <thead>
     <tr>
-      <th>サムネイル</th>
-      <th>タイトル</th>
-      <th>公開日</th>
-      <th>集計対象</th>
+      <th class="nowrap">サムネイル</th>
+      <th class="nowrap">タイトル</th>
+      <th class="nowrap">公開日</th>
+      <th class="nowrap">集計対象</th>
       <th></th>
     </tr>
     </thead>
     <tbody>
     <% @movies.each do |movie| %>
       <tr>
-        <td><%= thumb(movie.thumb_url) %></td>
+        <td class="nowrap"><%= thumb(movie.thumb_url) %></td>
         <td><%= link_to movie.title, "https://www.youtube.com/watch?v=#{movie.youtube_id}", target: '_blank' %></td>
-        <td><%= movie.published_at.strftime('%Y年%m月%d日') %></td>
-        <td><%= movie_flag_text(movie.flag) %></td>
-        <td>
+        <td class="nowrap"><%= movie.published_at.strftime('%Y年%m月%d日') %></td>
+        <td class="nowrap"><%= movie_flag_text(movie.flag) %></td>
+        <td class="nowrap">
           <%= link_to update_movie_flag_text(movie.flag), update_movie_flag_path(movie), class: 'btn btn-secondary btn-sm', method: :post %>
           <%= link_to '削除', "/artists/#{@artist.id}/movies/#{movie.id}/destroy", class: 'btn btn-danger btn-sm', method: :delete, data: { confirm: "本当に#{movie.title}を削除しますか？" } %>
         </td>
