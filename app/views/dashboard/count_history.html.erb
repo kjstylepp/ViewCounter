@@ -24,14 +24,16 @@
     <thead>
     <tr>
       <th>更新日</th>
-      <th>総再生数</th>
+      <th>再生数</th>
+      <th>前日からの増加分</th>
     </tr>
     </thead>
     <tbody>
-    <% @views.each do |view| %>
+    <% @views.each_with_index do |view, i| %>
       <tr>
         <td><%= view.update_date.strftime('%Y年%m月%d日') %></td>
         <td><%= view.count %></td>
+        <td><%= @diff_list.reverse[i] %></td>
       </tr>
     <% end %>
     </tbody>
@@ -49,7 +51,7 @@
         data: {
             labels: <%= @date_list.to_json.html_safe %>,
             datasets: [{
-                label: '総再生数',
+                label: '再生数',
                 type: "line",
                 fill: false,
                 data: <%= @sum_list.to_json %>,
@@ -57,7 +59,7 @@
                 backgroundColor: "gray",
                 yAxisID: "sum"
             }, {
-                label: '再生数',
+                label: '前日からの増加分',
                 data: <%= @diff_list.to_json %>,
                 borderColor: "rgba(15, 15, 15, 0.2)",
                 backgroundColor: "rgba(15, 15, 15, 0.2)",
