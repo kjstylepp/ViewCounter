@@ -19,7 +19,7 @@ class DashboardController < ApplicationController
       @artists_list.store artist.name, artist.id unless artist.movies.empty?
     end
 
-    movies = Movie.all.order(created_at: 'DESC')
+    movies = Movie.all.order(published_at: 'DESC')
     movies = movies.where(artist_id: @selected_artist) if @selected_artist
     movies = movies.where(flag: true) unless @checked
 

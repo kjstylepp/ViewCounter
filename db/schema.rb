@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_17_040438) do
+ActiveRecord::Schema.define(version: 2019_05_28_094810) do
 
   create_table "artists", force: :cascade do |t|
     t.string "name"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2019_05_17_040438) do
     t.boolean "flag"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "published_at"
     t.index ["artist_id"], name: "index_movies_on_artist_id"
   end
 

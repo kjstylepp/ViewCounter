@@ -33,6 +33,7 @@
     <tr>
       <th>サムネイル</th>
       <th>タイトル</th>
+      <th>公開日</th>
       <th>集計対象</th>
       <th></th>
     </tr>
@@ -42,6 +43,7 @@
       <tr>
         <td><%= thumb(movie.thumb_url) %></td>
         <td><%= link_to movie.title, "https://www.youtube.com/watch?v=#{movie.youtube_id}", target: '_blank' %></td>
+        <td><%= movie.published_at.strftime('%Y年%m月%d日') %></td>
         <td><%= movie_flag_text(movie.flag) %></td>
         <td>
           <%= link_to update_movie_flag_text(movie.flag), update_movie_flag_path(movie), class: 'btn btn-secondary btn-sm', method: :post %>

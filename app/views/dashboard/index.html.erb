@@ -22,6 +22,7 @@
       <th>アーティスト</th>
       <th>サムネイル</th>
       <th>タイトル</th>
+      <th>公開日</th>
       <th>集計対象</th>
       <th>再生数</th>
       <th>更新日</th>
@@ -34,6 +35,7 @@
         <td><%= movie.artist.name %></td>
         <td><%= thumb(movie.thumb_url) %></td>
         <td><%= link_to movie.title, "https://www.youtube.com/watch?v=#{movie.youtube_id}", target: '_blank' %></td>
+        <td><%= movie.published_at.strftime('%Y年%m月%d日') %></td>
         <td><%= movie_flag_text(movie.flag) %></td>
         <%= latest_view_count(movie) %>
         <td>

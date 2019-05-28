@@ -19,7 +19,7 @@ class ArtistsController < ApplicationController
   end
 
   def show
-    @movies = @artist.movies.page(params[:page])
+    @movies = @artist.movies.order(published_at: 'DESC').page(params[:page])
     @new_movie = Movie.new
   end
 

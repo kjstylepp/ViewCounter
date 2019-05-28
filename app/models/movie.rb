@@ -25,6 +25,7 @@ class Movie < ApplicationRecord
 
     self.title = movie_info['snippet']['title']
     self.thumb_url = movie_info['snippet']['thumbnails']['default']['url'] if movie_info['snippet']['thumbnails']['default']
+    self.published_at = DateTime.parse(movie_info['snippet']['publishedAt']).new_offset("+09:00").to_date
 
     return false unless save
 
