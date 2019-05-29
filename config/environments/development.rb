@@ -61,5 +61,6 @@ Rails.application.configure do
 
   config.google_api_key = ENV['VC_GOOGLE_API_KEY']
   config.allow_manual_update = true
+  config.allow_manual_delete = true
   config.job_interval = nil
 end

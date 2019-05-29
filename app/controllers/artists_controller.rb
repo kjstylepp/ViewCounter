@@ -34,9 +34,13 @@ class ArtistsController < ApplicationController
   end
 
   def destroy
-    @artist.destroy
+    if Rails.configuration.allow_manual_delete
+      @artist.destroy
 
-    redirect_to '/artists', notice: "#{@artist.name}を削除しました"
+      redirect_to '/artists', notice: "#{@artist.name}を削除しました"
+    else
+      redirect_to '/artists', alert: '手動でのデータ削除は現在許可されていません'
+    end
   end
 
   private

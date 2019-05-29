@@ -37,9 +37,13 @@ class MoviesController < ApplicationController
   end
 
   def destroy
-    @movie.destroy
+    if Rails.configuration.allow_manual_delete
+      @movie.destroy
 
-    redirect_to "/artists/#{@artist.id}", notice: "#{@movie.title}を削除しました"
+      redirect_to "/artists/#{@artist.id}", notice: "#{@movie.title}を削除しました"
+    else
+      redirect_to "/artists/#{@artist.id}", alert: '手動でのデータ削除は現在許可されていません'
+    end
   end
 
   private
