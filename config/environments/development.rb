@@ -59,6 +59,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.google_api_key = ENV['WACATE2019S_KEY']
+  config.google_api_key = ENV['VC_GOOGLE_API_KEY']
   config.allow_manual_update = true
+  config.job_interval = nil
 end

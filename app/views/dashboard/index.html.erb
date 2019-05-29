@@ -1,6 +1,6 @@
 <h1 class="h2">動画一覧</h1>
 
-<p>※再生数は毎日深夜1:10に自動で更新されます</p>
+<p>※<%= show_job_interval %> <%= show_latest_update_date %></p>
 
 <%= link_to '再生数履歴をエクスポート', '/export_counts', remote: true, class: 'btn btn-primary btn-sm' %>
 <%= link_to '手動で再生数更新', '/update_counts', class: 'btn btn-secondary btn-sm', method: :post %>
@@ -25,7 +25,6 @@
       <th>タイトル</th>
       <th class="nowrap">公開日</th>
       <th class="nowrap">再生数</th>
-      <th class="nowrap">更新日</th>
       <th></th>
     </tr>
     </thead>

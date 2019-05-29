@@ -92,6 +92,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.google_api_key = ENV['WACATE2019S_KEY']
-  config.allow_manual_update = ENV['ALLOW_MANUAL_UPDATE']
+  config.google_api_key = ENV['VC_GOOGLE_API_KEY']
+  config.allow_manual_update = ENV['VC_ALLOW_MANUAL_UPDATE']
+  config.job_interval = ENV['VC_JOB_INTERVAL']
 end
