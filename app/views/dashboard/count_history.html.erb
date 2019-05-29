@@ -13,7 +13,7 @@
       <tr>
         <td class="nowrap"><%= @movie.artist.name %></td>
         <td class="nowrap"><%= thumb(@movie.thumb_url) %></td>
-        <td><%= @movie.title %></td>
+        <td><%= link_to @movie.title, "https://www.youtube.com/watch?v=#{@movie.youtube_id}", target: '_blank' %></td>
       </tr>
     </tbody>
   </table>
