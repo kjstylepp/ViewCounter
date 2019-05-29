@@ -4,7 +4,7 @@ class ArtistsController < ApplicationController
   before_action :set_artist, only: %i[show edit update destroy]
 
   def index
-    @artists = Artist.page(params[:page])
+    @artists = Artist.all.order(created_at: 'DESC').page(params[:page])
     @new_artist = Artist.new
   end
 
