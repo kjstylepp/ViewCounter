@@ -6,7 +6,11 @@ class MoviesController < ApplicationController
 
   def create
     youtube_regex = /(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-    redirect_to "/artists/#{@artist.id}", alert: '動画を新規登録できませんでした' unless params[:youtube_url] =~ youtube_regex
+
+    unless params[:youtube_url] =~ youtube_regex
+      redirect_to "/artists/#{@artist.id}", alert: '正しいYouTubeの動画URLを入力してください'
+      return
+    end
 
     @movie = Movie.new
     @movie.youtube_id = $1
