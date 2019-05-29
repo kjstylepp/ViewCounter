@@ -8,8 +8,9 @@
 <div class="mb-3"></div>
 
 <%= form_with url: '/', method: :get, local: true do |form| %>
-  <%= form.select :artist, Artist.select_list, selected: @selected_artist %>　
-  <%= form.check_box :flag, { checked: @checked }, true, false %> 集計対象外の動画を含める　
+  <%= form.select :artist, Artist.select_list, { selected: @selected_artist }, { class: 'middle' } %>　
+  <%= form.check_box :flag, { checked: @checked , class: 'middle' }, true, false %>
+  <span class="middle">集計対象外の動画を含める　</span>
   <button class="btn btn-secondary btn-sm" type="submit">絞り込み</button>
 <% end %>
 
