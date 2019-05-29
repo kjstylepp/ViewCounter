@@ -92,6 +92,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  config.password = ENV['VC_ADMIN_PASSWORD']
   config.google_api_key = ENV['VC_GOOGLE_API_KEY']
   config.allow_manual_update = ENV['VC_ALLOW_MANUAL_UPDATE']
   config.allow_manual_delete = ENV['VC_ALLOW_MANUAL_DELETE']

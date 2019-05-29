@@ -44,6 +44,7 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  config.password = 'password'
   config.google_api_key = ENV['VC_GOOGLE_API_KEY']
   config.allow_manual_update = true
   config.allow_manual_delete = true

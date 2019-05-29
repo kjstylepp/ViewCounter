@@ -91,7 +91,7 @@ class DashboardController < ApplicationController
   end
 
   def create_admin_session
-    if params[:password] == 'password'
+    if params[:password] == Rails.configuration.password
       session[:admin_session] = 'admin_session'
 
       redirect_to '/', notice: 'ログインに成功しました'
