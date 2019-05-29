@@ -45,7 +45,7 @@ class DashboardController < ApplicationController
     end
   end
 
-  def export_counts ; end
+  def export_counts; end
 
   def do_export_counts
     artist_id = params[:artist] unless params[:artist].blank?
