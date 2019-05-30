@@ -77,7 +77,7 @@ class DashboardController < ApplicationController
       end
     end
 
-    if start_date && end_date && start_date > end_date
+    if start_date && end_date && !(start_date < end_date)
       redirect_to '/', alert: '集計開始日は終了日以前を指定してください'
       return
     end
