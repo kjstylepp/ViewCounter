@@ -5,8 +5,17 @@ class MoviesController < ApplicationController
   before_action :set_movie, only: %i[disable_flag enable_flag destroy]
 
   def create
+    if params[:youtube_url] && params[:youtube_url].length > 200
+      redirect_to "/artists/#{@artist.id}", alert: '最大200文字以内のURLを入力してください'
+      return
+    end
+
     youtube_regex = /(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-    redirect_to "/artists/#{@artist.id}", alert: '動画を新規登録できませんでした' unless params[:youtube_url] =~ youtube_regex
+
+    unless params[:youtube_url] =~ youtube_regex
+      redirect_to "/artists/#{@artist.id}", alert: '正しいYouTubeの動画URLを入力してください'
+      return
+    end
 
     @movie = Movie.new
     @movie.youtube_id = $1
