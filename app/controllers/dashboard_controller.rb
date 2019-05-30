@@ -18,15 +18,12 @@ class DashboardController < ApplicationController
   end
 
   def count_history
-    all_views = @movie.views.order(update_date: 'DESC')
+    @views = @movie.views.order(update_date: 'DESC').page(params[:page])
 
-    if all_views.empty?
+    if @views.empty?
       redirect_to '/', alert: '履歴データがありません'
       return
     end
-
-    @views = all_views.page(params[:page])
-    first_date = all_views.last.update_date
 
     @date_list = []
     @sum_list = []
@@ -35,10 +32,8 @@ class DashboardController < ApplicationController
     @views.reverse.each_with_index do |view, i|
       @date_list << view.update_date.strftime('%Y年%m月%d日')
       @sum_list << view.count
-      @diff_list << if view.update_date == first_date
+      @diff_list << if i.zero?
                       0
-                    elsif i.zero?
-                      @sum_list[i] - all_views[@views.limit_value * @views.current_page].count
                     else
                       @sum_list[i] - @sum_list[i - 1]
                     end
