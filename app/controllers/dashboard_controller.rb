@@ -85,7 +85,7 @@ class DashboardController < ApplicationController
     csv = Movie.export_as_csv(artist_id, checked, start_date, end_date)
 
     if csv
-      send_data csv, type: 'text/csv; charset=shift_jis', filename: '再生数履歴.csv'
+      send_data csv, type: 'text/csv', filename: '再生数履歴.csv'
     else
       redirect_to '/', alert: 'エクスポートできるデータがありません'
     end

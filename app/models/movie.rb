@@ -143,7 +143,5 @@ class Movie < ApplicationRecord
         csv << line
       end
     end
-
-    csv_data.encode(Encoding::SJIS)
   end
 end
