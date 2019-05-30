@@ -1,6 +1,4 @@
 class MoviesController < ApplicationController
-  include SessionManager
-
   before_action :set_artist
   before_action :set_movie, only: %i[disable_flag enable_flag destroy]
 
