@@ -25,7 +25,7 @@ class ArtistsController < ApplicationController
 
   def update
     if @artist.update(artist_params)
-      redirect_to '/artists', notice: "アーティスト名を#{@artist.name}に更新しました"
+      redirect_to '/artists', notice: 'アーティスト名を#{@artist.name}に更新しました'
     else
       redirect_to "/artists/#{@artist.id}/edit", alert: 'アーティスト名を更新できませんでした'
     end
