@@ -2,6 +2,11 @@ class DashboardController < ApplicationController
   before_action :set_artist_and_movie, only: %i[count_history update_count]
 
   def index
+    if params[:page]
+      params[:artist] = nil
+      params[:flag] = nil
+    end
+
     movies = Movie.all.order(published_at: 'DESC')
     movies = movies.where(artist_id: params[:artist]) unless params[:artist].blank?
     movies = movies.where(flag: true) unless params[:flag]
