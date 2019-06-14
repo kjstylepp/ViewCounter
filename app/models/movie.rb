@@ -144,6 +144,6 @@ class Movie < ApplicationRecord
       end
     end
 
-    csv_data.encode(Encoding::SJIS)
+    csv_data.encode(Encoding::SJIS, invalid: :replace, undef: :replace)
   end
 end
