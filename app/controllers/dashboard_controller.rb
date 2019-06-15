@@ -49,7 +49,15 @@ class DashboardController < ApplicationController
     if Rails.configuration.allow_manual_update
       result = Movie.update_all_count
 
-      redirect_to '/', notice: "全#{result[:all]}件の動画の#{result[:success]}件の再生数を更新しました"
+      if result[:all].zero?
+        redirect_to '/', alert: '更新対象の動画が存在しません'
+      elsif result[:success].zero?
+        redirect_to '/', alert: 'エラーが発生しました'
+      elsif result[:all] != result[:success]
+        redirect_to '/', alert: '一部の動画の再生数を更新できませんでした'
+      else
+        redirect_to '/', notice: '再生数を更新しました'
+      end
     else
       redirect_to '/', alert: '手動での更新は現在許可されていません'
     end
