@@ -62,20 +62,20 @@ class Movie < ApplicationRecord
     query = { id: video_ids, key: Rails.configuration.google_api_key, part: 'statistics' }
     res = JSON.parse(client.get('https://www.googleapis.com/youtube/v3/videos', query: query, follow_redirect: true).body)
 
-    break if res['items'].blank?
+    unless res['items'].blank?
+      res['items'].each do |item|
+        code = item['id']
+        count = item['statistics']['viewCount'].to_i
 
-    res['items'].each do |item|
-      code = item['id']
-      count = item['statistics']['viewCount'].to_i
+        movie = Movie.find_by_youtube_id(code)
 
-      movie = Movie.find_by_youtube_id(code)
+        next unless movie
 
-      next unless movie
+        view = View.find_or_create_by(movie_id: movie.id, update_date: today_date)
+        view.count = count
 
-      view = View.find_or_create_by(movie_id: movie.id, update_date: today_date)
-      view.count = count
-
-      result[:success] += 1 if view.save
+        result[:success] += 1 if view.save
+      end
     end
 
     result
